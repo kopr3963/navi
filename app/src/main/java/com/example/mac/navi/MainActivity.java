@@ -63,6 +63,8 @@ public class MainActivity extends Activity {
 
 
 
+        File ff = new File("");
+
 
 //        File file = new File("/data/data/com.example.mac.navi/cache/");
         File file = new File ("/data/data/com.example.mac.navi/lib");
