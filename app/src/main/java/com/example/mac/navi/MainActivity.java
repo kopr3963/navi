@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
         File ff = new File("");
 
 
-//        File file = new File("/data/data/com.example.mac.navi/cache/");
+//      File file = new File("/data/data/com.example.mac.navi/cache/");
         File file = new File ("/data/data/com.example.mac.navi/lib");
         String[] array = file.list();
         if ( array.length >0 ) {
@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 
 
 
-        //부기형 티맵 패키지명
+        //boogi 티맵 패키지명
         //Intent intent = getPackageManager().getLaunchIntentForPackage("com.skt.tmap.ku");
         //startActivity(intent);
 
@@ -196,8 +196,6 @@ public class MainActivity extends Activity {
         });
 //      ApplicationInfo asdf = packs;
 
-
-
 //        Drawable dr = packs.get(10).loadIcon(pm);
 //        Log.i(TAG, "onCreate: "+dr);
 
@@ -205,8 +203,6 @@ public class MainActivity extends Activity {
         for ( ApplicationInfo app : packs){
 //            Log.i(TAG, "TEST : "+ app.loadLabel(pm).toString() + "icon : ");
         }
-
-
 
         int size = 0;
         for (int i = 0; i < packs.size(); i++) {
@@ -240,13 +236,9 @@ public class MainActivity extends Activity {
         //for(int i = 0 ; i < installList.size() ; i++ ) {
         //    Log.d("PackageManager", installList.get(i).packageName);
         //}
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
-    //    private void getPackageList() {
+//    private void getPackageList() {
 //        PackageManager pm = this.getPackageManager(PackageInfo.GET_META_DATA);
 //        List<PackageInfo> packs =  getPackageManager().getInstalledPackages(PackageManager.PERMISSION_GRANTED);
 //        for (PackageInfo pack : packs) {
