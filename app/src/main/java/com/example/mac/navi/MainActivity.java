@@ -1,13 +1,12 @@
 package com.example.mac.navi;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,29 +14,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.mac.service.NaviService;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
-
+import java.util.Map;
+import static android.content.SharedPreferences.*;
 
 
 public class MainActivity extends Activity {
 
     String TAG = "MainActivity";
-
-    public boolean service_State = true;
-    public int time = 15;
-
-
+    MainVo vo = new MainVo();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
 //      티맵 패키지명 : com.skt.skaf.l001mtm091
 //      베가 티맵 패키지명 : com.skt.tmap.ku
@@ -63,45 +55,31 @@ public class MainActivity extends Activity {
 
 
 
-        File ff = new File("");
+
+        SharedPreferences sharedTest = getSharedPreferences("setting", MODE_PRIVATE);
+
+        //데이터를 수정하고 이러한 변경 사항을 SharedPreferences객체에 새로 커밋할 수 있는 환경을 설정할 새 편집기를 생성한다.
+        Editor editor = sharedTest.edit();
+
+        editor.putString("key","value");
+        editor.putString("key2","value2");
+
+        editor.commit();
+
+        Map<String, ?> all = sharedTest.getAll();
+
+//      sharedTest.registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener);
 
 
-//      File file = new File("/data/data/com.example.mac.navi/cache/");
-        File file = new File ("/data/data/com.example.mac.navi/lib");
-        String[] array = file.list();
-        if ( array.length >0 ) {
-            for (String obj : array) {
-                Log.i(TAG, "result : " + obj);
-            }
-        }
-        Log.i(TAG, "is File ? "+file.isFile());
-        Log.i(TAG, "file.list.length : " +array.length );
-//        Log.i(TAG, "array[0]"+array[0]);
 
-//        Log.i(TAG, "file.list() " + file.list());
-        MainActivity activity = new MainActivity();
-        Log.i(TAG, "File Can Read ? : "+ file.canRead());
+        Log.i(TAG, "sharedTest keys :  "+all.size());
+
+        Log.i(TAG, "SharedPreferences get : " + sharedTest.getString("key",""));
+
+        Log.i(TAG, "SharedPreferences Contains : "+sharedTest.contains("keys"));
 
 
-//        BufferedReader br = null;
-//        try {
-//            br = new BufferedReader(new FileReader(file));
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                System.out.println(line);
-//                Log.i(TAG, "bufferedReader : " + line);
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (br != null)
-//                try {
-//                    br.close();
-//                } catch (IOException e) {
-//                }
-//        }
+
         //갤럭시 win
 //        Intent intent = getPackageManager().getLaunchIntentForPackage("com.skt.skaf.l001mtm091");
 //        startActivity(intent);
@@ -133,6 +111,7 @@ public class MainActivity extends Activity {
 
 
         TextView timeout = (TextView) findViewById(R.id.timeout);
+        timeout.setText(vo.getTimeout()+"");
         ApplicationInfo  info ;
 
         PackageManager pm = this.getPackageManager();
@@ -164,32 +143,32 @@ public class MainActivity extends Activity {
 
         final TextView text_state = (TextView) findViewById(R.id.service_state);
 
-        text_state.setText(getState() ? "시작":"중단");
+        text_state.setText(vo.getState() ? "실행":"중단");
 
         final Button btn_state = (Button) findViewById(R.id.btn_state);
-        if (getState()){
-            btn_state.setText("종료");
+        if (vo.getState()){
+            btn_state.setText("서비스 종료");
 //            stopService(service);
         }else {
-            btn_state.setText("시작");
+            btn_state.setText("서비스 시작");
 //            startService(service);
         }
         btn_state.setOnClickListener(new View.OnClickListener() { //이벤트
             @Override
             public void onClick(View view) {
 //                stopService(service);
-                if( getState()){ // 시작중이면
+                if( vo.getState()){ // 시작중이면
                     Toast.makeText(MainActivity.this, "종료하겠습니다.", Toast.LENGTH_SHORT).show();
-                    setState(false);
-                    btn_state.setText("시작");
+                    vo.setState(false);
+                    btn_state.setText("서비스 시작");
                     text_state.setText("중단");
                     stopService(service);
 
                 }else{ //종료면
                     Toast.makeText(MainActivity.this, "시작하겠습니다", Toast.LENGTH_SHORT).show();
-                    setState(true);
-                    btn_state.setText("종료");
-                    text_state.setText("시작");
+                    vo.setState(true);
+                    btn_state.setText("서비스 종료");
+                    text_state.setText("실행");
                     startService(service);
                 }
             }
@@ -249,17 +228,25 @@ public class MainActivity extends Activity {
 //    }
 
 
-    public void setState (boolean service_State){
-        this.service_State= service_State;
-    }
-    public boolean getState(){
-        return this.service_State;
+    /*
+
+    SharedPreferences Test
+     */
+
+
+
+
+//    editor.putString("","");
+
+//    editor.putString("First", infoFirst); //First라는 key값으로 infoFirst 데이터를 저장한다.
+
+
+
+
+    @Override
+    public SharedPreferences getSharedPreferences(String name, int mode) {
+        return super.getSharedPreferences(name, mode);
     }
 
-    public void setTimeout ( int time){
-        this.time = time;
-    }
-    public int getTimeout (){
-        return this.time;
-    }
+
 }
